@@ -1,0 +1,33 @@
+# Environment & Secrets
+.env
+*.env
+backend/.env
+
+# Dependencies & virtual environments
+node_modules/
+frontend/node_modules/
+venv/
+env/
+.venv/
+ENV/
+
+# Build outputs & caches
+dist/
+frontend/dist/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs & temp files
+*.log
+.DS_Store
+.vscode/
+.idea/
+
+# Database files
+*.db
+health_platform.db
