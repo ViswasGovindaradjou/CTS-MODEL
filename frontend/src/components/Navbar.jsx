@@ -11,8 +11,7 @@ import {
   Plus, 
   ChevronDown, 
   MessageSquareHeart,
-  Calendar,
-  Sparkles
+  Calendar
 } from 'lucide-react';
 
 export default function Navbar({ toggleChat, unreadAlertsCount = 0 }) {
@@ -22,15 +21,48 @@ export default function Navbar({ toggleChat, unreadAlertsCount = 0 }) {
 
   const [activeTab, setActiveTab] = useState('Dashboard');
   const [isQuickActionOpen, setIsQuickActionOpen] = useState(false);
+  const [timeframe, setTimeframe] = useState('Week');
   const [selectedDay, setSelectedDay] = useState('Tue 23');
 
-  const days = [
-    { day: 'Sun', date: '21' },
-    { day: 'Mon', date: '22' },
-    { day: 'Tue', date: '23' },
-    { day: 'Wed', date: '24' },
-    { day: 'Thu', date: '25' },
-  ];
+  const getDaysForTimeframe = (tf) => {
+    switch (tf) {
+      case 'Last Week':
+        return [
+          { day: 'Sun', date: '14' },
+          { day: 'Mon', date: '15' },
+          { day: 'Tue', date: '16' },
+          { day: 'Wed', date: '17' },
+          { day: 'Thu', date: '18' },
+        ];
+      case 'Month':
+        return [
+          { day: 'W1', date: '1-7' },
+          { day: 'W2', date: '8-14' },
+          { day: 'W3', date: '15-21' },
+          { day: 'W4', date: '22-28' },
+          { day: 'W5', date: '29+' },
+        ];
+      case 'Today':
+        return [
+          { day: '8 AM', date: '72' },
+          { day: '11 AM', date: '85' },
+          { day: '2 PM', date: '93' },
+          { day: '5 PM', date: '88' },
+          { day: '8 PM', date: '80' },
+        ];
+      case 'Week':
+      default:
+        return [
+          { day: 'Sun', date: '21' },
+          { day: 'Mon', date: '22' },
+          { day: 'Tue', date: '23' },
+          { day: 'Wed', date: '24' },
+          { day: 'Thu', date: '25' },
+        ];
+    }
+  };
+
+  const days = getDaysForTimeframe(timeframe);
 
   const handleLogout = () => {
     logout();
@@ -199,10 +231,26 @@ export default function Navbar({ toggleChat, unreadAlertsCount = 0 }) {
               })}
             </div>
 
-            {/* "Week" Dropdown Pill */}
-            <div className="flex items-center gap-1 bg-white border border-slate-200/80 px-3 py-1.5 rounded-full text-xs font-bold text-slate-700 shadow-sm cursor-pointer hover:bg-slate-50">
-              <span>Week</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+            {/* Interactive "Week" Dropdown Pill */}
+            <div className="relative flex items-center bg-white border border-slate-200/80 px-3 py-1.5 rounded-full text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 cursor-pointer">
+              <select
+                value={timeframe}
+                onChange={(e) => {
+                  const newTf = e.target.value;
+                  setTimeframe(newTf);
+                  const newDays = getDaysForTimeframe(newTf);
+                  if (newDays.length > 0) {
+                    setSelectedDay(`${newDays[2].day} ${newDays[2].date}`);
+                  }
+                }}
+                className="bg-transparent text-xs font-bold text-slate-700 focus:outline-none appearance-none pr-4 cursor-pointer"
+              >
+                <option value="Week">Week</option>
+                <option value="Last Week">Last Week</option>
+                <option value="Month">Month</option>
+                <option value="Today">Today</option>
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2 pointer-events-none" />
             </div>
 
             {/* Black Circular "+" Quick Action Button matching Reference */}
