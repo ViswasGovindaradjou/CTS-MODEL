@@ -23,9 +23,10 @@ import {
   Minus, 
   Loader2,
   Stethoscope,
-  ArrowRight,
-  Zap,
-  Bell
+  Radio,
+  Clock,
+  CheckCircle2,
+  AlertTriangle
 } from 'lucide-react';
 
 export default function Dashboard() {
@@ -38,30 +39,65 @@ export default function Dashboard() {
   const [history, setHistory] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [telemetry, setTelemetry] = useState(null);
+  const [liveEvaluation, setLiveEvaluation] = useState(null);
+  const [countdown, setCountdown] = useState(20);
 
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      setLoading(true);
-      try {
-        const [trendsRes, historyRes, alertRes, telemetryRes] = await Promise.allSettled([
+  const fetchDashboardData = async () => {
+    try {
+      const [trendsRes, historyRes, alertRes, telemetryRes] = await Promise.allSettled([
+        API.get('/predictions/trends'),
+        API.get('/predictions/history'),
+        API.get('/alerts'),
+        API.get('/wearable/live-telemetry')
+      ]);
+
+      if (trendsRes.status === 'fulfilled') setTrends(trendsRes.value.data);
+      if (historyRes.status === 'fulfilled') setHistory(historyRes.value.data);
+      if (alertRes.status === 'fulfilled') setAlerts(alertRes.value.data);
+      if (telemetryRes.status === 'fulfilled') setTelemetry(telemetryRes.value.data.telemetry);
+
+    } catch (err) {
+      console.error('Error fetching dashboard data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const runLive20sMlEvaluation = async () => {
+    try {
+      const res = await API.get('/wearable/evaluate-live');
+      if (res.data) {
+        setLiveEvaluation(res.data);
+        if (res.data.telemetry) setTelemetry(res.data.telemetry);
+
+        // Refresh trends & history
+        const [trendsRes, historyRes] = await Promise.allSettled([
           API.get('/predictions/trends'),
-          API.get('/predictions/history'),
-          API.get('/alerts'),
-          API.get('/wearable/live-telemetry')
+          API.get('/predictions/history')
         ]);
-
         if (trendsRes.status === 'fulfilled') setTrends(trendsRes.value.data);
         if (historyRes.status === 'fulfilled') setHistory(historyRes.value.data);
-        if (alertRes.status === 'fulfilled') setAlerts(alertRes.value.data);
-        if (telemetryRes.status === 'fulfilled') setTelemetry(telemetryRes.value.data.telemetry);
-
-      } catch (err) {
-        console.error('Error fetching dashboard data:', err);
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (err) {
+      console.error('Error running 20s ML evaluation:', err);
+    }
+  };
+
+  useEffect(() => {
     fetchDashboardData();
+    runLive20sMlEvaluation();
+
+    const timer = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          runLive20sMlEvaluation();
+          return 20;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
   const handleWearableSync = (data) => {
@@ -86,9 +122,104 @@ export default function Dashboard() {
     return <Minus className="w-4 h-4 text-slate-400" />;
   };
 
+  const diabRisk = liveEvaluation?.diabetes?.risk_score ?? trends?.latest_diabetes_risk ?? 0.28;
+  const heartRisk = liveEvaluation?.cardiovascular?.risk_score ?? trends?.latest_heart_risk ?? 0.32;
+  const chronicRisk = trends?.latest_chronic_risk ?? 0.15;
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-10">
       
+      {/* 20-SECOND REAL-TIME ML EVALUATION TICKER BANNER */}
+      <div className="ref-card p-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-md">
+            <Radio className="w-5 h-5 animate-pulse" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-xs font-black text-white uppercase tracking-wider">Real-Time 20s ML Risk Assessor</h3>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-extrabold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                LIVE SYNC
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-300 font-medium mt-0.5">
+              Continuously comparing IoT biometrics against Diabetes (`diabetes_pipeline.pkl`) & Cardiovascular (`heart_pipeline.pkl`) ML baselines.
+            </p>
+          </div>
+        </div>
+
+        {/* 20s Countdown Circle */}
+        <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 shrink-0">
+          <Clock className="w-4 h-4 text-amber-400 animate-spin" />
+          <div className="text-right">
+            <div className="text-[10px] font-bold text-slate-300 uppercase">Next ML Evaluation</div>
+            <div className="text-sm font-black text-amber-300">{countdown}s</div>
+          </div>
+        </div>
+      </div>
+
+      {/* LIVE 20s COMPARISON CARDS (DIABETES & CARDIOVASCULAR) */}
+      {liveEvaluation && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          {/* Real-time Diabetes ML Comparison */}
+          <div className="ref-card p-4 bg-white border border-indigo-100/80 shadow-sm space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-extrabold text-slate-900 flex items-center gap-1.5">
+                <Activity className="w-4 h-4 text-indigo-600" />
+                Diabetes Real-Time ML Assessment
+              </span>
+              <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${
+                liveEvaluation.diabetes.risk_category === 'HIGH' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                liveEvaluation.diabetes.risk_category === 'MODERATE' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                'bg-emerald-50 text-emerald-700 border border-emerald-200'
+              }`}>
+                {(liveEvaluation.diabetes.risk_score * 100).toFixed(1)}% ({liveEvaluation.diabetes.risk_category})
+              </span>
+            </div>
+            <div className="text-[11px] text-slate-600 font-medium space-y-1 bg-indigo-50/50 p-2.5 rounded-xl border border-indigo-100">
+              <div className="flex justify-between">
+                <span>Glucose vs ML Threshold (140 mg/dL):</span>
+                <strong className="text-slate-900">{liveEvaluation.diabetes.comparison.glucose_vs_threshold}</strong>
+              </div>
+              <div className="flex justify-between">
+                <span>BMI vs ML Threshold (30.0):</span>
+                <strong className="text-slate-900">{liveEvaluation.diabetes.comparison.bmi_vs_threshold}</strong>
+              </div>
+            </div>
+          </div>
+
+          {/* Real-time Cardiovascular ML Comparison */}
+          <div className="ref-card p-4 bg-white border border-rose-100/80 shadow-sm space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-extrabold text-slate-900 flex items-center gap-1.5">
+                <HeartPulse className="w-4 h-4 text-rose-600" />
+                Cardiovascular Real-Time ML Assessment
+              </span>
+              <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${
+                liveEvaluation.cardiovascular.risk_category === 'HIGH' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                liveEvaluation.cardiovascular.risk_category === 'MODERATE' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                'bg-emerald-50 text-emerald-700 border border-emerald-200'
+              }`}>
+                {(liveEvaluation.cardiovascular.risk_score * 100).toFixed(1)}% ({liveEvaluation.cardiovascular.risk_category})
+              </span>
+            </div>
+            <div className="text-[11px] text-slate-600 font-medium space-y-1 bg-rose-50/50 p-2.5 rounded-xl border border-rose-100">
+              <div className="flex justify-between">
+                <span>Blood Pressure vs ML Baseline (130/80):</span>
+                <strong className="text-slate-900">{liveEvaluation.cardiovascular.comparison.bp_vs_threshold}</strong>
+              </div>
+              <div className="flex justify-between">
+                <span>Heart Rate vs ML Baseline (100 bpm):</span>
+                <strong className="text-slate-900">{liveEvaluation.cardiovascular.comparison.hr_vs_threshold}</strong>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      )}
+
       {/* 3-COLUMN REFERENCE DASHBOARD CONTAINER */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
         
@@ -106,9 +237,9 @@ export default function Dashboard() {
         {/* COLUMN 2: MIDDLE COLUMN (Central Human Body Medical Scan) */}
         <div className="lg:col-span-5 min-h-[580px]">
           <HumanBodyVisualization 
-            latestDiabetesRisk={trends?.latest_diabetes_risk || 0.28}
-            latestHeartRisk={trends?.latest_heart_risk || 0.32}
-            latestChronicRisk={trends?.latest_chronic_risk || 0.15}
+            latestDiabetesRisk={diabRisk}
+            latestHeartRisk={heartRisk}
+            latestChronicRisk={chronicRisk}
             telemetry={telemetry}
           />
         </div>
@@ -125,9 +256,9 @@ export default function Dashboard() {
 
           <div className="flex-1 min-h-[220px]">
             <HealthDonutCard 
-              latestDiabetesRisk={trends?.latest_diabetes_risk || 0.28}
-              latestHeartRisk={trends?.latest_heart_risk || 0.32}
-              latestChronicRisk={trends?.latest_chronic_risk || 0.15}
+              latestDiabetesRisk={diabRisk}
+              latestHeartRisk={heartRisk}
+              latestChronicRisk={chronicRisk}
               telemetry={telemetry}
             />
           </div>
@@ -157,9 +288,7 @@ export default function Dashboard() {
           <div>
             <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">{t('diabetes_risk')}</p>
             <h3 className="text-2xl font-black text-indigo-600 mt-1">
-              {trends?.latest_diabetes_risk !== null && trends?.latest_diabetes_risk !== undefined
-                ? `${(trends.latest_diabetes_risk * 100).toFixed(1)}%` 
-                : 'N/A'}
+              {(diabRisk * 100).toFixed(1)}%
             </h3>
           </div>
           <div className="p-3 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center gap-1">
@@ -171,9 +300,7 @@ export default function Dashboard() {
           <div>
             <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">{t('heart_risk')}</p>
             <h3 className="text-2xl font-black text-rose-600 mt-1">
-              {trends?.latest_heart_risk !== null && trends?.latest_heart_risk !== undefined
-                ? `${(trends.latest_heart_risk * 100).toFixed(1)}%` 
-                : 'N/A'}
+              {(heartRisk * 100).toFixed(1)}%
             </h3>
           </div>
           <div className="p-3 rounded-2xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center gap-1">
@@ -185,9 +312,7 @@ export default function Dashboard() {
           <div>
             <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">{t('chronic_risk')}</p>
             <h3 className="text-2xl font-black text-purple-600 mt-1">
-              {trends?.latest_chronic_risk !== null && trends?.latest_chronic_risk !== undefined
-                ? `${(trends.latest_chronic_risk * 100).toFixed(1)}%` 
-                : 'N/A'}
+              {(chronicRisk * 100).toFixed(1)}%
             </h3>
           </div>
           <div className="p-3 rounded-2xl bg-purple-50 text-purple-600 border border-purple-100 flex items-center gap-1">
@@ -215,11 +340,11 @@ export default function Dashboard() {
           {latestDiabetes ? (
             <RiskCard 
               title={t('diabetes_risk')}
-              riskScore={latestDiabetes.risk_score}
-              riskCategory={latestDiabetes.risk_category}
+              riskScore={diabRisk}
+              riskCategory={liveEvaluation?.diabetes?.risk_category || latestDiabetes.risk_category}
               diseaseType="diabetes"
               timestamp={latestDiabetes.created_at}
-              keyFactors={['Plasma Glucose', 'Body Mass Index', 'Diastolic BP']}
+              keyFactors={liveEvaluation?.diabetes?.key_factors || ['Plasma Glucose', 'Body Mass Index', 'Diastolic BP']}
             />
           ) : (
             <div className="ref-card p-6 text-center flex flex-col items-center justify-center min-h-[220px] space-y-3">
@@ -236,11 +361,11 @@ export default function Dashboard() {
           {latestHeart ? (
             <RiskCard 
               title={t('heart_risk')}
-              riskScore={latestHeart.risk_score}
-              riskCategory={latestHeart.risk_category}
+              riskScore={heartRisk}
+              riskCategory={liveEvaluation?.cardiovascular?.risk_category || latestHeart.risk_category}
               diseaseType="cardiovascular"
               timestamp={latestHeart.created_at}
-              keyFactors={['Resting BP', 'Serum Cholesterol', 'Max Heart Rate']}
+              keyFactors={liveEvaluation?.cardiovascular?.key_factors || ['Resting BP', 'Serum Cholesterol', 'Max Heart Rate']}
             />
           ) : (
             <div className="ref-card p-6 text-center flex flex-col items-center justify-center min-h-[220px] space-y-3">
