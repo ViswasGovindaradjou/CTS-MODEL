@@ -1,6 +1,41 @@
 import React from 'react';
 
-export default function HealthDonutCard({ healthScore = 88 }) {
+export default function HealthDonutCard({ 
+  latestDiabetesRisk = 0.28,
+  latestHeartRisk = 0.32,
+  latestChronicRisk = 0.15,
+  telemetry = null,
+  healthScore = null
+}) {
+  // Compute overall health score dynamically if not passed directly
+  let calculatedScore = 88;
+
+  if (healthScore !== null && healthScore !== undefined) {
+    calculatedScore = healthScore;
+  } else {
+    // Overall Health % = 100 - (Average Risk Score %)
+    const avgRiskPct = ((latestDiabetesRisk + latestHeartRisk + latestChronicRisk) / 3) * 100;
+    
+    // Telemetry fine-tuning adjustments (heart rate & blood glucose)
+    let heartAdjustment = 0;
+    if (telemetry?.heart_rate_bpm) {
+      if (telemetry.heart_rate_bpm > 100) heartAdjustment += 3; // slight risk penalty
+      if (telemetry.heart_rate_bpm < 60) heartAdjustment += 2;
+    }
+
+    let glucoseAdjustment = 0;
+    if (telemetry?.blood_glucose_mg_dl) {
+      if (telemetry.blood_glucose_mg_dl > 140) glucoseAdjustment += 4;
+    }
+
+    calculatedScore = Math.max(15, Math.min(99, Math.round(100 - avgRiskPct - heartAdjustment - glucoseAdjustment)));
+  }
+
+  // Calculate SVG stroke offset for dynamic circular meter animation
+  // Circumference = 2 * PI * r = 2 * 3.14159 * 38 ≈ 238.76
+  const circumference = 238.76;
+  const strokeOffset = circumference - (calculatedScore / 100) * circumference;
+
   return (
     <div className="ref-card p-6 flex flex-col items-center justify-center relative overflow-hidden h-full">
       
@@ -30,36 +65,39 @@ export default function HealthDonutCard({ healthScore = 88 }) {
             fill="none"
           />
 
-          {/* Segment 1: Sky Blue Segment (Activity/Stress) */}
+          {/* Segment 1: Secondary Sky Blue Segment */}
           <circle
             cx="50"
             cy="50"
             r="38"
             stroke="url(#skySegment)"
             strokeWidth="14"
-            strokeDasharray="238"
-            strokeDashoffset="60"
+            strokeDasharray={circumference}
+            strokeDashoffset="40"
             fill="none"
             strokeLinecap="round"
           />
 
-          {/* Segment 2: Main Purple Segment (Health Core) */}
+          {/* Segment 2: Dynamic Main Purple Health Core Segment */}
           <circle
             cx="50"
             cy="50"
             r="38"
             stroke="url(#purpleSegment)"
             strokeWidth="14"
-            strokeDasharray="238"
-            strokeDashoffset="100"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeOffset}
             fill="none"
             strokeLinecap="round"
+            className="transition-all duration-700 ease-out"
           />
         </svg>
 
         {/* Center Percentage Display */}
         <div className="absolute flex flex-col items-center justify-center text-center">
-          <span className="text-3xl font-black text-slate-900 tracking-tight">{healthScore}%</span>
+          <span className="text-3xl font-black text-slate-900 tracking-tight transition-all duration-500">
+            {calculatedScore}%
+          </span>
           <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-0.5">Overall</span>
         </div>
 

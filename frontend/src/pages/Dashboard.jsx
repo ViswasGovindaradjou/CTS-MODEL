@@ -124,7 +124,12 @@ export default function Dashboard() {
           </div>
 
           <div className="flex-1 min-h-[220px]">
-            <HealthDonutCard healthScore={88} />
+            <HealthDonutCard 
+              latestDiabetesRisk={trends?.latest_diabetes_risk || 0.28}
+              latestHeartRisk={trends?.latest_heart_risk || 0.32}
+              latestChronicRisk={trends?.latest_chronic_risk || 0.15}
+              telemetry={telemetry}
+            />
           </div>
         </div>
 

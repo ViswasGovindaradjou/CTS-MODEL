@@ -49,16 +49,8 @@ export default function HumanBodyVisualization({
           className="h-[360px] w-auto object-contain z-10 filter drop-shadow-md transition-transform duration-500 group-hover:scale-[1.02]"
         />
 
-        {/* Pointer Lines Overlay SVG matching Reference Image */}
+        {/* Pointer Lines Overlay SVG */}
         <svg viewBox="0 0 300 400" className="absolute inset-0 w-full h-full z-15 pointer-events-none">
-          {/* Line to Brain (Head top right) */}
-          <line x1="150" y1="52" x2="200" y2="65" stroke="#8b5cf6" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.8" />
-          <circle cx="150" cy="52" r="4" fill="#a855f7" />
-
-          {/* Line to Lungs (Chest top left) */}
-          <line x1="135" y1="115" x2="75" y2="140" stroke="#0284c7" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.8" />
-          <circle cx="135" cy="115" r="4" fill="#38bdf8" />
-
           {/* Line to Heart (Chest left) */}
           <line x1="144" y1="128" x2="60" y2="200" stroke="#f43f5e" strokeWidth="1.8" opacity="0.9" />
           <circle cx="144" cy="128" r="4" fill="#f43f5e" />
@@ -66,44 +58,19 @@ export default function HumanBodyVisualization({
           {/* Line to Glucose/Pancreas (Abdomen right) */}
           <line x1="152" y1="165" x2="210" y2="225" stroke="#3b82f6" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.8" />
           <circle cx="152" cy="165" r="4" fill="#3b82f6" />
-
-          {/* Line to Kidney (Lower abdomen right) */}
-          <line x1="150" y1="195" x2="205" y2="280" stroke="#10b981" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.8" />
-          <circle cx="150" cy="195" r="4" fill="#10b981" />
         </svg>
 
-        {/* Floating Callout Badge 1: BRAIN (Top Right) */}
-        <div className="absolute top-[12%] right-[4%] z-20 flex items-center gap-2 bg-white/95 backdrop-blur-md border border-slate-200/80 px-3 py-1.5 rounded-full shadow-md">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <div className="text-[11px] font-black text-slate-800">Brain</div>
-          <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Excellent</span>
-        </div>
-
-        {/* Floating Callout Badge 2: LUNGS (Top Left) */}
-        <div className="absolute top-[28%] left-[2%] z-20 flex items-center gap-2 bg-white/95 backdrop-blur-md border border-slate-200/80 px-3 py-1.5 rounded-full shadow-md">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <div className="text-[11px] font-black text-slate-800">Lungs</div>
-          <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Excellent</span>
-        </div>
-
-        {/* Floating Callout Badge 3: HEART (Middle Left) */}
+        {/* Floating Callout Badge 1: HEART (Middle Left) */}
         <div className="absolute top-[48%] left-[0%] z-20 flex items-center gap-2 bg-white/95 backdrop-blur-md border border-rose-200 px-3 py-1.5 rounded-full shadow-lg">
           <Heart className="w-3.5 h-3.5 text-rose-600 animate-pulse" />
           <div className="text-[11px] font-black text-slate-900">Heart • {heartBpm} bpm</div>
         </div>
 
-        {/* Floating Callout Badge 4: GLUCOSE / METABOLISM (Middle Right) */}
+        {/* Floating Callout Badge 2: GLUCOSE / METABOLISM (Middle Right) */}
         <div className="absolute top-[54%] right-[2%] z-20 flex items-center gap-2 bg-white/95 backdrop-blur-md border border-slate-200/80 px-3 py-1.5 rounded-full shadow-md">
           <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
           <div className="text-[11px] font-black text-slate-800">Glucose</div>
           <span className="text-[10px] font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full">{glucose} mg/dL</span>
-        </div>
-
-        {/* Floating Callout Badge 5: KIDNEY (Lower Right) */}
-        <div className="absolute bottom-[22%] right-[4%] z-20 flex items-center gap-2 bg-white/95 backdrop-blur-md border border-slate-200/80 px-3 py-1.5 rounded-full shadow-md">
-          <span className="w-2 h-2 rounded-full bg-emerald-500" />
-          <div className="text-[11px] font-black text-slate-800">Kidney</div>
-          <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Optimal</span>
         </div>
 
         {/* Bottom Left Circular Risk Arc Gauge matching Reference */}
