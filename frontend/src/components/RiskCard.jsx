@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { Info, TrendingUp } from 'lucide-react';
+import { Info, TrendingUp, Sparkles } from 'lucide-react';
+import LayerRecommendationModal from './LayerRecommendationModal';
 
 export default function RiskCard({ 
   title, 
@@ -8,9 +9,11 @@ export default function RiskCard({
   riskCategory, 
   keyFactors = [], 
   diseaseType = 'diabetes',
-  timestamp 
+  timestamp,
+  showCareRecommendation = false
 }) {
   const { t } = useLanguage();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const percentage = (riskScore * 100).toFixed(1);
 
@@ -99,14 +102,36 @@ export default function RiskCard({
         </div>
       </div>
 
-      {timestamp && (
-        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-medium">
-          <span>Assessed: {new Date(timestamp).toLocaleDateString()}</span>
-          <span className="flex items-center gap-1 text-indigo-600 font-bold">
-            <TrendingUp className="w-3 h-3" /> ML Verified
+      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+        {showCareRecommendation ? (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-3 py-1.5 rounded-full bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-[10px] font-extrabold flex items-center gap-1 transition-all cursor-pointer"
+          >
+            <Sparkles className="w-3 h-3 text-indigo-600" />
+            Show Care Recommendation
+          </button>
+        ) : (
+          <span className="text-[11px] text-slate-400 font-medium">
+            {timestamp ? `Assessed: ${new Date(timestamp).toLocaleDateString()}` : 'Live Telemetry Risk'}
           </span>
-        </div>
+        )}
+
+        <span className="flex items-center gap-1 text-indigo-600 font-bold text-[11px]">
+          <TrendingUp className="w-3 h-3" /> Verified
+        </span>
+      </div>
+
+      {showCareRecommendation && (
+        <LayerRecommendationModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          layerTitle={`${title} Layer`}
+          diseaseType={diseaseType}
+          riskCategory={riskCategory}
+        />
       )}
+
     </div>
   );
 }

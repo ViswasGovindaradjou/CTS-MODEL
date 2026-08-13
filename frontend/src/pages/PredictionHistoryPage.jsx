@@ -65,7 +65,7 @@ export default function PredictionHistoryPage() {
             <History className="w-5 h-5 text-indigo-600" />
             {t('prediction_history')}
           </h1>
-          <p className="text-xs text-slate-500 font-medium mt-0.5">Chronological record of all executed ML risk assessments and probability scores</p>
+          <p className="text-xs text-slate-500 font-medium mt-0.5">Chronological record of all executed health risk assessments and probability scores</p>
         </div>
 
         {/* Filter dropdown */}
@@ -108,7 +108,7 @@ export default function PredictionHistoryPage() {
                   <th className="p-4">Assessment Type</th>
                   <th className="p-4">Risk Category</th>
                   <th className="p-4">Probability Score</th>
-                  <th className="p-4">Pipeline Status</th>
+                  <th className="p-4">Assessment Status</th>
                   <th className="p-4 text-right">Actions</th>
                 </tr>
               </thead>
@@ -143,7 +143,7 @@ export default function PredictionHistoryPage() {
                     <td className="p-4 text-emerald-700 font-bold whitespace-nowrap">
                       <div className="flex items-center gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>ML Verified</span>
+                        <span>Verified</span>
                       </div>
                     </td>
 

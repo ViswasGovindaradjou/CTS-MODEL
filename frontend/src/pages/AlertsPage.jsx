@@ -56,7 +56,7 @@ export default function AlertsPage() {
             <Bell className="w-5 h-5 text-indigo-600" />
             {t('alerts')}
           </h1>
-          <p className="text-xs text-slate-500 font-medium mt-0.5">Automated ML risk alerts and trend notifications.</p>
+          <p className="text-xs text-slate-500 font-medium mt-0.5">Automated risk alerts and trend notifications.</p>
         </div>
 
         {alerts.some(a => !a.is_read) && (

@@ -40,7 +40,6 @@ export default function Dashboard() {
   const [alerts, setAlerts] = useState([]);
   const [telemetry, setTelemetry] = useState(null);
   const [liveEvaluation, setLiveEvaluation] = useState(null);
-  const [countdown, setCountdown] = useState(20);
 
   const fetchDashboardData = async () => {
     try {
@@ -63,14 +62,13 @@ export default function Dashboard() {
     }
   };
 
-  const runLive20sMlEvaluation = async () => {
+  const runLiveEvaluation = async () => {
     try {
       const res = await API.get('/wearable/evaluate-live');
       if (res.data) {
         setLiveEvaluation(res.data);
         if (res.data.telemetry) setTelemetry(res.data.telemetry);
 
-        // Refresh trends & history
         const [trendsRes, historyRes] = await Promise.allSettled([
           API.get('/predictions/trends'),
           API.get('/predictions/history')
@@ -79,25 +77,19 @@ export default function Dashboard() {
         if (historyRes.status === 'fulfilled') setHistory(historyRes.value.data);
       }
     } catch (err) {
-      console.error('Error running 20s ML evaluation:', err);
+      console.error('Error running live evaluation:', err);
     }
   };
 
   useEffect(() => {
     fetchDashboardData();
-    runLive20sMlEvaluation();
+    runLiveEvaluation();
 
-    const timer = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          runLive20sMlEvaluation();
-          return 20;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    const interval = setInterval(() => {
+      runLiveEvaluation();
+    }, 3000);
 
-    return () => clearInterval(timer);
+    return () => clearInterval(interval);
   }, []);
 
   const handleWearableSync = (data) => {
@@ -129,7 +121,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-10">
       
-      {/* 20-SECOND REAL-TIME ML EVALUATION TICKER BANNER */}
+      {/* REAL-TIME HEALTH RISK ASSESSOR BANNER (NO TIMER) */}
       <div className="ref-card p-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-md">
@@ -137,38 +129,29 @@ export default function Dashboard() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-xs font-black text-white uppercase tracking-wider">Real-Time 20s ML Risk Assessor</h3>
+              <h3 className="text-xs font-black text-white uppercase tracking-wider">Real-Time Health Risk Assessor</h3>
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-extrabold flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                 LIVE SYNC
               </span>
             </div>
             <p className="text-[11px] text-slate-300 font-medium mt-0.5">
-              Continuously comparing IoT biometrics against Diabetes (`diabetes_pipeline.pkl`) & Cardiovascular (`heart_pipeline.pkl`) ML baselines.
+              Continuously comparing IoT biometrics against Diabetes & Cardiovascular baselines.
             </p>
-          </div>
-        </div>
-
-        {/* 20s Countdown Circle */}
-        <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 shrink-0">
-          <Clock className="w-4 h-4 text-amber-400 animate-spin" />
-          <div className="text-right">
-            <div className="text-[10px] font-bold text-slate-300 uppercase">Next ML Evaluation</div>
-            <div className="text-sm font-black text-amber-300">{countdown}s</div>
           </div>
         </div>
       </div>
 
-      {/* LIVE 20s COMPARISON CARDS (DIABETES & CARDIOVASCULAR) */}
+      {/* LIVE COMPARISON CARDS (DIABETES & CARDIOVASCULAR) */}
       {liveEvaluation && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
-          {/* Real-time Diabetes ML Comparison */}
+          {/* Real-time Diabetes Comparison */}
           <div className="ref-card p-4 bg-white border border-indigo-100/80 shadow-sm space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-extrabold text-slate-900 flex items-center gap-1.5">
                 <Activity className="w-4 h-4 text-indigo-600" />
-                Diabetes Real-Time ML Assessment
+                Diabetes Real-Time Assessment
               </span>
               <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${
                 liveEvaluation.diabetes.risk_category === 'HIGH' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
@@ -180,22 +163,22 @@ export default function Dashboard() {
             </div>
             <div className="text-[11px] text-slate-600 font-medium space-y-1 bg-indigo-50/50 p-2.5 rounded-xl border border-indigo-100">
               <div className="flex justify-between">
-                <span>Glucose vs ML Threshold (140 mg/dL):</span>
+                <span>Glucose vs Threshold (140 mg/dL):</span>
                 <strong className="text-slate-900">{liveEvaluation.diabetes.comparison.glucose_vs_threshold}</strong>
               </div>
               <div className="flex justify-between">
-                <span>BMI vs ML Threshold (30.0):</span>
+                <span>BMI vs Threshold (30.0):</span>
                 <strong className="text-slate-900">{liveEvaluation.diabetes.comparison.bmi_vs_threshold}</strong>
               </div>
             </div>
           </div>
 
-          {/* Real-time Cardiovascular ML Comparison */}
+          {/* Real-time Cardiovascular Comparison */}
           <div className="ref-card p-4 bg-white border border-rose-100/80 shadow-sm space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-extrabold text-slate-900 flex items-center gap-1.5">
                 <HeartPulse className="w-4 h-4 text-rose-600" />
-                Cardiovascular Real-Time ML Assessment
+                Cardiovascular Real-Time Assessment
               </span>
               <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${
                 liveEvaluation.cardiovascular.risk_category === 'HIGH' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
@@ -207,11 +190,11 @@ export default function Dashboard() {
             </div>
             <div className="text-[11px] text-slate-600 font-medium space-y-1 bg-rose-50/50 p-2.5 rounded-xl border border-rose-100">
               <div className="flex justify-between">
-                <span>Blood Pressure vs ML Baseline (130/80):</span>
+                <span>Blood Pressure vs Baseline (130/80):</span>
                 <strong className="text-slate-900">{liveEvaluation.cardiovascular.comparison.bp_vs_threshold}</strong>
               </div>
               <div className="flex justify-between">
-                <span>Heart Rate vs ML Baseline (100 bpm):</span>
+                <span>Heart Rate vs Baseline (100 bpm):</span>
                 <strong className="text-slate-900">{liveEvaluation.cardiovascular.comparison.hr_vs_threshold}</strong>
               </div>
             </div>
@@ -330,7 +313,7 @@ export default function Dashboard() {
             {t('latest_assessments')}
           </h2>
           <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-            ML Models Online (`.pkl` Inference Active)
+            Health Risk Models Active
           </span>
         </div>
 

@@ -55,6 +55,13 @@ def startup_event():
     except Exception as e:
         logger.error(f"Failed to load ML models on startup: {e}")
         
+    # Initialize MongoDB Atlas Database Connection
+    try:
+        from app.database.mongo import mongo_manager
+        mongo_manager.connect()
+    except Exception as e:
+        logger.error(f"Failed to initialize MongoDB: {e}")
+        
     # Auto-seed demo account
     try:
         from app.database.connection import SessionLocal
@@ -128,3 +135,4 @@ def health_check():
         "database": "connected",
         "ml_models": "loaded" if ml_manager.is_loaded else "unloaded"
     }
+

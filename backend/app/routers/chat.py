@@ -4,7 +4,7 @@ from app.database.connection import get_db
 from app.database.models import User, ChatHistory, RiskPrediction, PatientHealthRecord
 from app.schemas.chat import ChatMessageInput, ChatMessageResponse
 from app.services.groq_service import groq_service
-from app.routers.auth import get_current_user
+from app.routers.auth import get_current_user_optional as get_current_user
 
 router = APIRouter(prefix="/api/chat", tags=["Healthcare Chatbot"])
 

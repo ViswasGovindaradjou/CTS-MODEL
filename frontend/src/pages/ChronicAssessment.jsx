@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import API from '../services/api';
 import RiskCard from '../components/RiskCard';
-import RecommendationCard from '../components/RecommendationCard';
+import LayerRecommendationModal from '../components/LayerRecommendationModal';
 import { ShieldAlert, Sparkles, Loader2, CheckCircle, ArrowLeft } from 'lucide-react';
 
 export default function ChronicAssessment() {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     HighBP: 1,
@@ -74,7 +75,7 @@ export default function ChronicAssessment() {
               <ShieldAlert className="w-5 h-5 text-purple-600" />
               {t('chronic_assessment')}
             </h1>
-            <p className="text-xs text-slate-500 font-medium">CDC BRFSS Epidemiological ML Pipeline (`brfss_pipeline.pkl` model inference)</p>
+            <p className="text-xs text-slate-500 font-medium">Chronic Health Risk Assessment</p>
           </div>
         </div>
       </div>
@@ -213,28 +214,46 @@ export default function ChronicAssessment() {
                 diseaseType="brfss_chronic"
                 keyFactors={result.key_factors}
                 timestamp={result.timestamp}
+                showCareRecommendation={true}
               />
             </div>
             
             <div className="md:col-span-2 ref-card p-6 border border-slate-200/80 flex flex-col justify-between">
               <div>
-                <h3 className="text-sm font-extrabold text-slate-900 mb-2">CDC BRFSS Chronic Diagnostic Breakdown</h3>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-extrabold text-slate-900">Chronic Health Assessment Breakdown</h3>
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="px-3.5 py-1.5 rounded-full bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                    Show Care Recommendation
+                  </button>
+                </div>
                 <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                  The machine learning model evaluated your 19 CDC BRFSS parameters.
+                  Evaluated your 19 health parameters.
                   Risk classification is <strong className="text-purple-600 font-extrabold">{result.risk_category}</strong> with a calculated risk score of <strong className="text-purple-600 font-extrabold">{result.risk_percentage}</strong>.
                 </p>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-medium">
-                <span className="text-slate-500">Pipeline: <code className="text-purple-600 font-bold">brfss_pipeline.pkl</code></span>
+              <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-end text-xs font-medium">
                 <span className="text-emerald-700 font-bold flex items-center gap-1">
-                  <CheckCircle className="w-4 h-4" /> ML Inference Completed
+                  <CheckCircle className="w-4 h-4" /> Assessment Completed
                 </span>
               </div>
             </div>
           </div>
 
-          <RecommendationCard recommendations={result.recommendations} />
+          <LayerRecommendationModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            layerTitle="CDC BRFSS Chronic Disease Layer"
+            diseaseType="brfss_chronic"
+            riskCategory={result?.risk_category || "MODERATE"}
+            riskScore={result?.risk_score || 0.35}
+            keyFactors={result?.key_factors || []}
+            patientData={formData}
+          />
         </div>
       )}
 

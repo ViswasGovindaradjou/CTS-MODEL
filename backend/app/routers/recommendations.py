@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.database.connection import get_db
 from app.database.models import User, CareRecommendation, RiskPrediction
 from app.schemas.recommendation import CareRecommendationResponse
-from app.routers.auth import get_current_user
+from app.routers.auth import get_current_user_optional as get_current_user
 
 router = APIRouter(prefix="/api/recommendations", tags=["Recommendations"])
 
@@ -103,3 +103,37 @@ def translate_care_recommendation(
 
     translated = groq_service.translate_recommendations(recommendations, target_language)
     return translated
+
+@router.post("/analyze-layer", response_model=dict)
+def analyze_disease_layer(
+    payload: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Analyzes specific disease layer biometrics using Groq API and returns personalized AI care recommendations.
+    """
+    disease_type = payload.get("disease_type", "cardiovascular")
+    risk_score = float(payload.get("risk_score", 0.35))
+    risk_category = payload.get("risk_category", "MODERATE")
+    key_factors = payload.get("key_factors", [])
+    patient_data = payload.get("patient_data", {})
+    language = payload.get("language", "en")
+
+    patient_profile = {
+        "full_name": getattr(current_user, "full_name", "Patient") or "Patient",
+        "age": getattr(current_user, "age", 45) or 45,
+        "gender": getattr(current_user, "gender", "male") or "male"
+    }
+
+    recs = groq_service.generate_recommendations(
+        disease_type=disease_type,
+        risk_score=risk_score,
+        risk_category=risk_category,
+        key_factors=key_factors,
+        patient_data=patient_data,
+        patient_profile=patient_profile,
+        language=language
+    )
+
+    return recs
+

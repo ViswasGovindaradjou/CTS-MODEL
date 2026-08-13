@@ -16,11 +16,11 @@ class GroqService:
         self.model = settings.GROQ_MODEL or "llama-3.3-70b-versatile"
         self.api_url = "https://api.groq.com/openai/v1/chat/completions"
 
-    def _call_groq(self, messages: List[Dict[str, str]], temperature: float = 0.4, max_tokens: int = 3000) -> str:
+    def _call_groq(self, messages: List[Dict[str, str]], temperature: float = 0.3, max_tokens: int = 600) -> str:
         # Reload API key dynamically from env/settings on every request
         import os
-        api_key = os.getenv("GROQ_API_KEY") or settings.GROQ_API_KEY or self.api_key
-        model = os.getenv("GROQ_MODEL") or settings.GROQ_MODEL or self.model
+        api_key = os.getenv("GROQ_API_KEY") or settings.GROQ_API_KEY or ""
+        model = os.getenv("GROQ_MODEL") or settings.GROQ_MODEL or "llama-3.1-8b-instant"
 
         if not api_key:
             logger.warning("GROQ_API_KEY is not set in environment. Falling back to local AI rules.")
@@ -39,7 +39,7 @@ class GroqService:
         }
 
         try:
-            response = requests.post(self.api_url, headers=headers, json=payload, timeout=15)
+            response = requests.post(self.api_url, headers=headers, json=payload, timeout=3.5)
             if response.status_code == 200:
                 data = response.json()
                 content = data['choices'][0]['message']['content'].strip()
@@ -219,7 +219,7 @@ Do NOT include markdown block markers or any commentary outside the raw JSON obj
             lang_instruction = "Hindi (हिंदी) - Use natural, polite, and grammatically accurate Devanagari Hindi script"
 
         system_prompt = (
-            "You are 'AuraHealth AI', a world-class compassionate, highly knowledgeable, and personalized healthcare chatbot. "
+            "You are 'HealthSync AI', a world-class compassionate, highly knowledgeable, and personalized healthcare chatbot. "
             "You provide individualized health explanations, risk assessment guidance, and preventive advice. "
             f"{context_str}\n"
             "STRICT GUIDELINES:\n"
@@ -381,7 +381,7 @@ Do NOT include markdown block markers or any commentary outside the raw JSON obj
                 )
             else:
                 return (
-                    "வணக்கம்! நான் உங்கள் AuraHealth AI உதவியாளன். "
+                    "வணக்கம்! நான் உங்கள் HealthSync AI உதவியாளன். "
                     "உங்கள் ஆரோக்கியம், நீரிழிவு நோய், இதய நோய் மற்றும் நல்வாழ்வு பற்றிய கேள்விகளுக்கு நான் பதிலளிக்க முடியும். "
                     "உங்களுக்கு என்ன உதவி தேவை? "
                     "\n\n(குறிப்பு: அவசர சிகிச்சைக்கு உடனடியாக மருத்துவரை தொடர்பு கொள்ளவும்)."
@@ -402,7 +402,7 @@ Do NOT include markdown block markers or any commentary outside the raw JSON obj
                 )
             else:
                 return (
-                    "नमस्ते! मैं आपका AuraHealth AI स्वास्थ्य सहायक हूँ। "
+                    "नमस्ते! मैं आपका HealthSync AI स्वास्थ्य सहायक हूँ। "
                     "मैं मधुमेह, हृदय रोग और सामान्य स्वास्थ्य से जुड़े आपके प्रश्नों का उत्तर दे सकता हूँ। "
                     "आज मैं आपकी क्या सहायता कर सकता हूँ? "
                     "\n\n(अस्वीकरण: चिकित्सा आपात स्थिति में तुरंत डॉक्टर से संपर्क करें)।"
@@ -423,7 +423,7 @@ Do NOT include markdown block markers or any commentary outside the raw JSON obj
                 )
             else:
                 return (
-                    "Hello! I am AuraHealth AI, your personalized health companion. "
+                    "Hello! I am HealthSync AI, your personalized health companion. "
                     "I can answer healthcare questions, explain risk assessment scores, and share preventive lifestyle guidance. "
                     "How can I help you today? "
                     "\n\nDisclaimer: For medical diagnosis or urgent care, please see a qualified medical professional."

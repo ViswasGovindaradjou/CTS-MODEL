@@ -11,7 +11,9 @@ import {
   Plus, 
   ChevronDown, 
   MessageSquareHeart,
-  Calendar
+  Calendar,
+  X,
+  CheckCircle2
 } from 'lucide-react';
 
 export default function Navbar({ toggleChat, unreadAlertsCount = 0 }) {
@@ -23,6 +25,28 @@ export default function Navbar({ toggleChat, unreadAlertsCount = 0 }) {
   const [isQuickActionOpen, setIsQuickActionOpen] = useState(false);
   const [timeframe, setTimeframe] = useState('Week');
   const [selectedDay, setSelectedDay] = useState('Tue 23');
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
+
+  const changeTimeframe = (newTf) => {
+    setTimeframe(newTf);
+    const newDays = getDaysForTimeframe(newTf);
+    if (newDays.length > 0) {
+      setSelectedDay(`${newDays[2].day} ${newDays[2].date}`);
+    }
+    window.dispatchEvent(new CustomEvent('timeframeChanged', { detail: newTf }));
+  };
+
+  const handleDateSelect = (e) => {
+    const val = e.target.value;
+    setSelectedDate(val);
+    if (val) {
+      const d = new Date(val);
+      const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
+      const dayNum = d.getDate();
+      setSelectedDay(`${dayName} ${dayNum}`);
+    }
+  };
 
   const getDaysForTimeframe = (tf) => {
     switch (tf) {
@@ -202,12 +226,68 @@ export default function Navbar({ toggleChat, unreadAlertsCount = 0 }) {
 
         {/* Sub-header Date Bar & Quick Action Button matching Reference */}
         {user && (
-          <div className="flex items-center justify-end gap-3 pt-1">
+          <div className="flex items-center justify-end gap-3 pt-1 relative">
             
-            {/* Settings Icon Pill */}
-            <Link to="/profile" className="p-2 rounded-full bg-white border border-slate-200/80 text-slate-500 hover:text-slate-900 transition-colors shadow-sm">
-              <Calendar className="w-4 h-4" />
-            </Link>
+            {/* Interactive Calendar Button */}
+            <div className="relative">
+              <button 
+                onClick={() => setIsCalendarOpen(!isCalendarOpen)} 
+                className="p-2 rounded-full bg-white border border-slate-200/80 text-indigo-600 hover:bg-indigo-50 transition-colors shadow-sm cursor-pointer flex items-center justify-center"
+                title="Select Date & Timeframe"
+              >
+                <Calendar className="w-4 h-4" />
+              </button>
+
+              {/* Interactive Calendar Popover Modal */}
+              {isCalendarOpen && (
+                <div className="absolute right-0 top-11 z-50 w-72 bg-white rounded-2xl border border-slate-200 shadow-2xl p-4 space-y-3 animate-fadeIn">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                    <span className="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                      <Calendar className="w-4 h-4 text-indigo-600" />
+                      Select Date & View
+                    </span>
+                    <button 
+                      onClick={() => setIsCalendarOpen(false)}
+                      className="p-1 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block">Custom Date Picker</label>
+                    <input 
+                      type="date" 
+                      value={selectedDate}
+                      onChange={handleDateSelect}
+                      className="w-full p-2 text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+                    />
+                  </div>
+
+                  <div className="space-y-1 pt-1">
+                    <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block">Select Timeframe</label>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {['Week', 'Month', 'Last Week', 'Today'].map((tf) => (
+                        <button
+                          key={tf}
+                          onClick={() => {
+                            changeTimeframe(tf);
+                            setIsCalendarOpen(false);
+                          }}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                            timeframe === tf
+                              ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                              : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                          }`}
+                        >
+                          {tf}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Week Date Selector Pills matching reference */}
             <div className="flex items-center gap-1 bg-white border border-slate-200/80 p-1 rounded-full shadow-sm">
@@ -231,18 +311,11 @@ export default function Navbar({ toggleChat, unreadAlertsCount = 0 }) {
               })}
             </div>
 
-            {/* Interactive "Week" Dropdown Pill */}
+            {/* Interactive "Week" / "Month" Dropdown Pill */}
             <div className="relative flex items-center bg-white border border-slate-200/80 px-3 py-1.5 rounded-full text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 cursor-pointer">
               <select
                 value={timeframe}
-                onChange={(e) => {
-                  const newTf = e.target.value;
-                  setTimeframe(newTf);
-                  const newDays = getDaysForTimeframe(newTf);
-                  if (newDays.length > 0) {
-                    setSelectedDay(`${newDays[2].day} ${newDays[2].date}`);
-                  }
-                }}
+                onChange={(e) => changeTimeframe(e.target.value)}
                 className="bg-transparent text-xs font-bold text-slate-700 focus:outline-none appearance-none pr-4 cursor-pointer"
               >
                 <option value="Week">Week</option>

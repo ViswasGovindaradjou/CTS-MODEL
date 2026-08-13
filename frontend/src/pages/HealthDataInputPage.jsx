@@ -150,7 +150,7 @@ export default function HealthDataInputPage() {
       navigate(path.includes('diabetes') ? '/assess/diabetes' : '/assess/heart', { state: { result: res.data } });
     } catch (err) {
       console.error('Prediction Error:', err);
-      setError(err.response?.data?.detail || 'ML Prediction failed.');
+      setError(err.response?.data?.detail || 'Prediction failed.');
     } finally {
       setLoading(false);
     }
@@ -170,7 +170,7 @@ export default function HealthDataInputPage() {
               <Sliders className="w-5 h-5 text-teal-400" />
               {t('enter_health_data')}
             </h1>
-            <p className="text-xs text-slate-400">Multi-section clinical biomarker entry compatible with ML `.pkl` model pipelines</p>
+            <p className="text-xs text-slate-400">Multi-section clinical biomarker entry compatible with clinical model assessments</p>
           </div>
         </div>
       </div>

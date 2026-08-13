@@ -37,10 +37,10 @@ export default function ChatbotDrawer({ isOpen, onClose }) {
       {
         sender: 'bot',
         text: language === 'ta' 
-          ? "வணக்கம்! நான் AuraHealth AI உதவியாளன். உங்கள் ஆரோக்கியம், நீரிழிவு மற்றும் இதய நோய் பற்றிய கேள்விகளைக் கேட்கலாம்."
+          ? "வணக்கம்! நான் HealthSync AI உதவியாளன். உங்கள் ஆரோக்கியம், நீரிழிவு மற்றும் இதய நோய் பற்றிய கேள்விகளைக் கேட்கலாம்."
           : (language === 'hi' 
-            ? "नमस्ते! मैं AuraHealth AI स्वास्थ्य सहायक हूँ। आप मुझसे अपने स्वास्थ्य, मधुमेह और हृदय जोखिम के बारे में पूछ सकते हैं।"
-            : "Hello! I am AuraHealth AI Assistant. Ask me any questions regarding diabetes, heart disease, clinical metrics, or preventive health.")
+            ? "नमस्ते! मैं HealthSync AI स्वास्थ्य सहायक हूँ। आप मुझसे अपने स्वास्थ्य, मधुमेह और हृदय जोखिम के बारे में पूछ सकते हैं।"
+            : "Hello! I am HealthSync AI Assistant. Ask me any questions regarding diabetes, heart disease, clinical metrics, or preventive health.")
       }
     ]);
   }, [language]);

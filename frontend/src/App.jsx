@@ -22,6 +22,8 @@ import ChatPage from './pages/ChatPage';
 import AlertsPage from './pages/AlertsPage';
 import ProfilePage from './pages/ProfilePage';
 
+import { Loader2 } from 'lucide-react';
+
 function AppLayout() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -55,7 +57,16 @@ function AppLayout() {
 }
 
 function RootRouter() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f4f6fa] text-indigo-600">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <Routes>
       <Route path="/landing" element={<LandingPage />} />

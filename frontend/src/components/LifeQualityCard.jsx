@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MoreHorizontal, ChevronDown } from 'lucide-react';
 
 export default function LifeQualityCard({ totalAssessments = 0 }) {
   const [timeframe, setTimeframe] = useState('Week');
+
+  useEffect(() => {
+    const handleTimeframeChange = (e) => {
+      if (e.detail) {
+        setTimeframe(e.detail);
+      }
+    };
+    window.addEventListener('timeframeChanged', handleTimeframeChange);
+    return () => window.removeEventListener('timeframeChanged', handleTimeframeChange);
+  }, []);
 
   // Dynamic score and bar data based on selected timeframe
   const getDataForTimeframe = () => {

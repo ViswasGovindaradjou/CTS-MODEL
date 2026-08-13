@@ -4,8 +4,8 @@ from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-env_path = os.path.join(BASE_DIR, ".env")
-load_dotenv(env_path)
+backend_env = os.path.join(BASE_DIR, ".env")
+load_dotenv(backend_env, override=True)
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Chronic Disease Health Monitoring & Risk Prediction Platform"
@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     AWS_REGION: str = os.getenv("AWS_REGION", "us-east-1")
     AWS_ACCESS_KEY_ID: str = os.getenv("AWS_ACCESS_KEY_ID", "")
     AWS_SECRET_ACCESS_KEY: str = os.getenv("AWS_SECRET_ACCESS_KEY", "")
+    
+    # MongoDB Configuration
+    MONGODB_URI: str = os.getenv("MONGODB_URI", "mongodb+srv://<db_username>:<db_password>@cluster0.wdmfycq.mongodb.net/?appName=Cluster0")
+    MONGODB_DB_NAME: str = os.getenv("MONGODB_DB_NAME", "health_platform")
     
     # Groq API Key
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")

@@ -66,9 +66,9 @@ export default function AiAnalyticsCard({ totalAssessments = 0 }) {
 
       {/* Main Content */}
       <div className="mt-4 z-10 max-w-[65%]">
-        <h4 className="text-sm font-bold text-slate-100">AI & ML Risk Detection</h4>
+        <h4 className="text-sm font-bold text-slate-100">AI Health Risk Detection</h4>
         <p className="text-[11px] text-slate-300 leading-snug mt-1">
-          Predictive machine learning pipelines continuously analyzing patient biomarkers & clinical parameters.
+          Predictive clinical models continuously analyzing patient biomarkers & clinical parameters.
         </p>
       </div>
 

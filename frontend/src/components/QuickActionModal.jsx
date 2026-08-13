@@ -20,14 +20,14 @@ export default function QuickActionModal({ isOpen, onClose, onToggleChat }) {
   const actions = [
     {
       title: 'Run Diabetes Risk Test',
-      desc: 'Execute 8-metric clinical ML prediction model',
+      desc: 'Execute 8-metric clinical prediction model',
       icon: Activity,
       color: 'bg-indigo-50 text-indigo-600 border-indigo-100',
       action: () => { navigate('/assess/diabetes'); onClose(); }
     },
     {
       title: 'Run Cardiovascular Risk Test',
-      desc: 'Evaluate 13-parameter cardiac risk pipeline',
+      desc: 'Evaluate 13-parameter cardiac risk model',
       icon: HeartPulse,
       color: 'bg-rose-50 text-rose-600 border-rose-100',
       action: () => { navigate('/assess/heart'); onClose(); }
@@ -78,7 +78,7 @@ export default function QuickActionModal({ isOpen, onClose, onToggleChat }) {
             </div>
             <div>
               <h3 className="text-base font-extrabold text-slate-900">Quick Health Actions</h3>
-              <p className="text-xs text-slate-400">Execute ML diagnostics or sync telemetry</p>
+              <p className="text-xs text-slate-400">Execute clinical diagnostics or sync telemetry</p>
             </div>
           </div>
 

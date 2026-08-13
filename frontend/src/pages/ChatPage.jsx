@@ -42,10 +42,10 @@ export default function ChatPage() {
         id: Date.now(),
         sender: 'bot',
         text: language === 'ta' 
-          ? "வணக்கம்! நான் AuraHealth AI சுகாதார உதவியாளன். உங்கள் ஆரோக்கியம், நீரிழிவு நோய் மற்றும் இதய நோய் அபாயம் பற்றிய கேள்விகளைக் கேட்கலாம்."
+          ? "வணக்கம்! நான் HealthSync AI சுகாதார உதவியாளன். உங்கள் ஆரோக்கியம், நீரிழிவு நோய் மற்றும் இதய நோய் அபாயம் பற்றிய கேள்விகளைக் கேட்கலாம்."
           : (language === 'hi' 
-            ? "नमस्ते! मैं AuraHealth AI स्वास्थ्य सहायक हूँ। आप मुझसे अपने स्वास्थ्य, मधुमेह और हृदय जोखिम के बारे में पूछ सकते हैं।"
-            : "Hello! I am AuraHealth AI, your personalized healthcare companion. Ask me any questions regarding diabetes, heart disease, metrics, or preventive health."),
+            ? "नमस्ते! मैं HealthSync AI स्वास्थ्य सहायक हूँ। आप मुझसे अपने स्वास्थ्य, मधुमेह और हृदय जोखिम के बारे में पूछ सकते हैं।"
+            : "Hello! I am HealthSync AI, your personalized healthcare companion. Ask me any questions regarding diabetes, heart disease, metrics, or preventive health."),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ]);

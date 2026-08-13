@@ -46,7 +46,7 @@ export default function RecommendationsPage() {
             {t('recommendations')}
           </h1>
           <p className="text-xs text-slate-500 font-medium mt-0.5">
-            AI generated clinical care recommendations based on your ML risk output.
+            AI generated clinical care recommendations based on your clinical risk output.
           </p>
         </div>
 

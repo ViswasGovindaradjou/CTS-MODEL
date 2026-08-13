@@ -89,7 +89,7 @@ export default function RecommendationCard({ recommendations }) {
             {t('personalized_guidance')}
           </h2>
           <p className="text-xs text-slate-500 mt-0.5 flex flex-wrap items-center gap-2">
-            <span>Tailored AI care guidance generated from your ML risk profile</span>
+            <span>Tailored AI care guidance generated from your health risk profile</span>
             {loading && (
               <span className="text-indigo-600 font-bold flex items-center gap-1.5 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full">
                 <Loader2 className="w-3 h-3 animate-spin" />
@@ -115,12 +115,15 @@ export default function RecommendationCard({ recommendations }) {
                 <h3 className="text-sm font-bold text-slate-800">{cat.title}</h3>
               </div>
               <ul className="space-y-2">
-                {cat.items.map((item, itemIdx) => (
-                  <li key={itemIdx} className="text-xs text-slate-700 font-medium flex items-start gap-2 leading-relaxed">
-                    <span className={`${cat.color} font-bold mt-0.5`}>✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {cat.items.map((item, itemIdx) => {
+                  const itemText = typeof item === 'object' ? (item.text || item.advice || item.suggestion || JSON.stringify(item)) : String(item);
+                  return (
+                    <li key={itemIdx} className="text-xs text-slate-700 font-medium flex items-start gap-2 leading-relaxed">
+                      <span className={`${cat.color} font-bold mt-0.5`}>✓</span>
+                      <span>{itemText}</span>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           );

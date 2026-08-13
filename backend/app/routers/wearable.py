@@ -76,8 +76,8 @@ def evaluate_live_telemetry(current_user: User = Depends(get_current_user)):
             "risk_category": diab_cat,
             "key_factors": diab_factors,
             "comparison": {
-                "glucose_vs_threshold": f"{glucose} mg/dL vs ML baseline 140 mg/dL ({'EXCEEDS' if glucose > 140 else 'NORMAL'})",
-                "bmi_vs_threshold": f"{bmi} vs ML baseline 30.0 ({'ELEVATED' if bmi >= 30 else 'NORMAL'})"
+                "glucose_vs_threshold": f"{glucose} mg/dL vs baseline 140 mg/dL ({'EXCEEDS' if glucose > 140 else 'NORMAL'})",
+                "bmi_vs_threshold": f"{bmi} vs baseline 30.0 ({'ELEVATED' if bmi >= 30 else 'NORMAL'})"
             }
         },
         "cardiovascular": {
@@ -85,8 +85,8 @@ def evaluate_live_telemetry(current_user: User = Depends(get_current_user)):
             "risk_category": heart_cat,
             "key_factors": heart_factors,
             "comparison": {
-                "bp_vs_threshold": f"{systolic}/{diastolic} mmHg vs ML baseline 130/80 mmHg ({'HIGH' if systolic >= 130 or diastolic >= 80 else 'NORMAL'})",
-                "hr_vs_threshold": f"{hr} bpm vs ML baseline 100 bpm ({'ELEVATED' if hr > 100 else 'NORMAL'})"
+                "bp_vs_threshold": f"{systolic}/{diastolic} mmHg vs baseline 130/80 mmHg ({'HIGH' if systolic >= 130 or diastolic >= 80 else 'NORMAL'})",
+                "hr_vs_threshold": f"{hr} bpm vs baseline 100 bpm ({'ELEVATED' if hr > 100 else 'NORMAL'})"
             }
         }
     }

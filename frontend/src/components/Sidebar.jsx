@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { 
   LayoutDashboard, 
   Activity, 
+  Heart,
   HeartPulse, 
   ShieldAlert, 
   LineChart, 
@@ -24,7 +25,6 @@ export default function Sidebar() {
     { to: "/assess/heart", label: t('heart_assessment'), icon: HeartPulse },
     { to: "/assess/chronic", label: t('chronic_assessment'), icon: ShieldAlert },
     { to: "/history", label: t('history_trends'), icon: LineChart },
-    { to: "/recommendations", label: t('recommendations'), icon: Sparkles },
     { to: "/prediction-history", label: t('prediction_history'), icon: History },
     { to: "/chat", label: t('chatbot'), icon: MessageSquareHeart },
     { to: "/alerts", label: t('alerts'), icon: Bell },
@@ -39,12 +39,14 @@ export default function Sidebar() {
         
         {/* Brand App Logo matching Reference */}
         <div className="flex items-center gap-3 px-2 py-1">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0">
-            <Activity className="w-6 h-6" />
+          <div className="w-9 h-9 rounded-2xl bg-[#00a8e8] text-white flex items-center justify-center shadow-md shadow-[#00a8e8]/20 shrink-0">
+            <Heart className="w-5 h-5 fill-white text-white" />
           </div>
           <div className="hidden lg:block">
-            <h2 className="text-base font-black text-slate-900 tracking-tight">AuraHealth</h2>
-            <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">AI Monitoring</p>
+            <h2 className="text-base font-extrabold text-slate-900 tracking-tight flex items-center">
+              HealthSync AI<span className="text-[#00a8e8] text-[10px] font-bold align-super ml-0.5">™</span>
+            </h2>
+            <p className="text-[10px] font-bold text-[#00a8e8] uppercase tracking-widest">AI Monitoring</p>
           </div>
         </div>
 
@@ -89,10 +91,10 @@ export default function Sidebar() {
       <div className="p-3 bg-gradient-to-br from-indigo-50 via-slate-50 to-purple-50 rounded-2xl border border-indigo-100/80 hidden lg:block space-y-1">
         <div className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs font-extrabold text-slate-800">ML Engines Active</span>
+          <span className="text-xs font-extrabold text-slate-800">Health Models Active</span>
         </div>
         <p className="text-[11px] text-slate-500 leading-tight">
-          Pima, Heart, & BRFSS pipelines online.
+          Diabetes, Cardiovascular, & Chronic Models active.
         </p>
       </div>
 

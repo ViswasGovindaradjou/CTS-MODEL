@@ -31,3 +31,4 @@ htmlcov/
 # Database files
 *.db
 health_platform.db
+.vercel

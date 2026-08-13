@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
-import { Activity, Lock, Mail, User, Globe, Loader2, AlertCircle, ArrowRight, ShieldCheck, HeartPulse, CheckCircle2 } from 'lucide-react';
+import { Activity, Heart, Lock, Mail, User, Globe, Loader2, AlertCircle, ArrowRight, ShieldCheck, HeartPulse, CheckCircle2 } from 'lucide-react';
 
 export default function Signup() {
   const { register } = useAuth();
@@ -59,8 +59,8 @@ export default function Signup() {
         <div className="hidden lg:flex lg:col-span-6 flex-col justify-between space-y-6 p-8 ref-card border border-slate-200/80 relative overflow-hidden min-h-[540px]">
           
           <div className="space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md">
-              <Activity className="w-7 h-7" />
+            <div className="w-9 h-9 rounded-2xl bg-[#00a8e8] text-white flex items-center justify-center shadow-md shadow-[#00a8e8]/20 shrink-0">
+              <Heart className="w-5 h-5 fill-white text-white" />
             </div>
             <h2 className="text-3xl font-black text-slate-900 tracking-tight leading-snug">
               Create Your <br />
