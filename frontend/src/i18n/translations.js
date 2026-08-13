@@ -68,7 +68,7 @@ export const translations = {
     
     // Landing Page
     landing_hero_title: "AI-Powered Chronic Disease Management",
-    landing_hero_sub: "Continuous health tracking, machine-learning risk predictions for Diabetes & Cardiovascular disease, and Groq AI personalized care recommendations.",
+    landing_hero_sub: "Continuous health tracking, machine-learning risk predictions for Diabetes & Cardiovascular disease, and AI personalized care recommendations.",
     get_started: "Get Started",
     explore_features: "Explore Features",
     features_title: "Intelligent Clinical Platform Features",
@@ -77,8 +77,8 @@ export const translations = {
     step1_desc: "Sync IoT smartwatch sensors in real-time or upload clinical PDF lab reports for instant field population.",
     step2_title: "2. Scikit-Learn ML Pipelines",
     step2_desc: "Trained .pkl pipelines calculate real-time probability scores for Diabetes & Heart Disease.",
-    step3_title: "3. Groq AI Personal Care",
-    step3_desc: "Llama-3.3-70b generates 6 categories of tailored lifestyle, nutrition, and monitoring advice.",
+    step3_title: "3. AI Personal Care",
+    step3_desc: "Generates 6 categories of tailored lifestyle, nutrition, and monitoring advice.",
     step4_title: "4. Multilingual Chatbot & Alerts",
     step4_desc: "Ask wellness questions in Tamil, English, or Hindi, and receive automated trend risk alerts.",
     
@@ -172,7 +172,7 @@ export const translations = {
     
     // Landing Page
     landing_hero_title: "AI-ஆல் இயங்கும் நாட்பட்ட நோய் மேலாண்மை",
-    landing_hero_sub: "தொடர்ச்சியான சுகாதார கண்காணிப்பு, நீரிழிவு மற்றும் இதய நோய்களுக்கான எல்.எம் அபாய கணிப்புகள் மற்றும் Groq AI தனிப்பயனாக்கப்பட்ட பராமரிப்பு பரிந்துரைகள்.",
+    landing_hero_sub: "தொடர்ச்சியான சுகாதார கண்காணிப்பு, நீரிழிவு மற்றும் இதய நோய்களுக்கான எல்.எம் அபாய கணிப்புகள் மற்றும் AI தனிப்பயனாக்கப்பட்ட பராமரிப்பு பரிந்துரைகள்.",
     get_started: "தொடங்குங்கள்",
     explore_features: "அம்சங்களை ஆராயுங்கள்",
     features_title: "நுண்ணறிவு மருத்துவ தள அம்சங்கள்",
@@ -181,8 +181,8 @@ export const translations = {
     step1_desc: "IoT ஸ்மார்ட்வாட்ச் சென்சார்களை நேரடியாக இணைக்கவும் அல்லது மருத்துவ அறிக்கை PDFகளை பதிவேற்றவும்.",
     step2_title: "2. எல்.எம் மாடல் கணிப்பு",
     step2_desc: "பயிற்சி பெற்ற .pkl மாடல்கள் நீரிழிவு மற்றும் இதய நோய் அபாயத்தை துல்லியமாக கணக்கிடுகின்றன.",
-    step3_title: "3. Groq AI தனிப்பயனாக்கப்பட்ட பராமரிப்பு",
-    step3_desc: "Llama-3.3-70b உங்கள் உடல்நிலைக்கு ஏற்ற 6 வகை பராமரிப்பு ஆலோசனைகளை வழங்குகிறது.",
+    step3_title: "3. AI தனிப்பயனாக்கப்பட்ட பராமரிப்பு",
+    step3_desc: "உங்கள் உடல்நிலைக்கு ஏற்ற 6 வகை பராமரிப்பு ஆலோசனைகளை வழங்குகிறது.",
     step4_title: "4. பன்மொழி அரட்டை & எச்சரிக்கைகள்",
     step4_desc: "தமிழ், ஆங்கிலம் அல்லது ஹிந்தியில் கேள்விகளைக் கேட்டு உடனடி பதில்களைப் பெறுங்கள்.",
     
@@ -276,7 +276,7 @@ export const translations = {
     
     // Landing Page
     landing_hero_title: "AI-संचालित क्रॉनिक बीमारी प्रबंधन",
-    landing_hero_sub: "सतत स्वास्थ्य ट्रैकिंग, मधुमेह और हृदय रोग के लिए एमएल जोखिम पूर्वानुमान और Groq AI व्यक्तिगत देखभाल की सिफारिशें।",
+    landing_hero_sub: "सतत स्वास्थ्य ट्रैकिंग, मधुमेह और हृदय रोग के लिए एमएल जोखिम पूर्वानुमान और AI व्यक्तिगत देखभाल की सिफारिशें।",
     get_started: "शुरू करें",
     explore_features: "विशेषताओं की खोज करें",
     features_title: "बुद्धिमान नैदानिक ​​मंच की विशेषताएं",
@@ -285,8 +285,8 @@ export const translations = {
     step1_desc: "वास्तविक समय में IoT स्मार्टवॉच सेंसर सिंक करें या क्लिनिकल पीडीएफ रिपोर्ट अपलोड करें।",
     step2_title: "2. मशीन लर्निंग मॉडल पूर्वानुमान",
     step2_desc: "प्रशिक्षित .pkl मॉडल मधुमेह और हृदय रोग के जोखिम की सटीक गणना करते हैं।",
-    step3_title: "3. Groq AI व्यक्तिगत देखभाल",
-    step3_desc: "Llama-3.3-70b आपकी स्वास्थ्य स्थिति के आधार पर 6 श्रेणियों में सलाह प्रदान करता है।",
+    step3_title: "3. AI व्यक्तिगत देखभाल",
+    step3_desc: "आपकी स्वास्थ्य स्थिति के आधार पर 6 श्रेणियों में सलाह प्रदान करता है।",
     step4_title: "4. बहुभाषी चैटबॉट और अलर्ट",
     step4_desc: "तमिल, अंग्रेजी या हिंदी में स्वास्थ्य संबंधी प्रश्न पूछें और त्वरित प्रतिक्रिया प्राप्त करें।",
     

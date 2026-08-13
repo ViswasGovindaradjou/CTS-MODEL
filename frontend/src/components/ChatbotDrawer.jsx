@@ -105,7 +105,7 @@ export default function ChatbotDrawer({ isOpen, onClose }) {
               AI Health Assistant
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             </h3>
-            <p className="text-[11px] text-indigo-600 font-bold">FastAPI → Groq AI (Tamil / EN / HI)</p>
+            <p className="text-[11px] text-indigo-600 font-bold">Multilingual AI (Tamil / EN / HI)</p>
           </div>
         </div>
 

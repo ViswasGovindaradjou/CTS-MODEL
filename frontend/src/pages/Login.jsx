@@ -51,7 +51,7 @@ export default function Login() {
             </div>
             <h2 className="text-3xl font-black text-slate-900 tracking-tight leading-snug">
               Clinical Risk Prediction <br />
-              <span className="text-indigo-600">& Groq AI Insights</span>
+              <span className="text-indigo-600">& Clinical AI Insights</span>
             </h2>
             <p className="text-xs text-slate-500 font-medium leading-relaxed">
               Access your personalized chronic disease portal. Evaluate diabetes and cardiovascular risk probabilities in real time with verified ML pipeline execution.
@@ -75,7 +75,7 @@ export default function Login() {
 
           <div className="flex items-center gap-4 text-xs font-bold text-slate-500 border-t border-slate-100 pt-4">
             <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-indigo-600" /> Enterprise HIPAA Security</span>
-            <span className="flex items-center gap-1.5"><Sparkles className="w-4 h-4 text-purple-600" /> Groq AI Enabled</span>
+            <span className="flex items-center gap-1.5"><Sparkles className="w-4 h-4 text-purple-600" /> AI Medical Assistant</span>
           </div>
 
         </div>

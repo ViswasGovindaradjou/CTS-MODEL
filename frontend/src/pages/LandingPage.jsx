@@ -49,8 +49,6 @@ export default function LandingPage() {
           <nav className="hidden md:flex items-center gap-8 text-xs font-bold text-slate-600">
             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-indigo-600 transition-colors">Home</button>
             <button onClick={() => scrollToSection('features')} className="hover:text-indigo-600 transition-colors">Platform Features</button>
-            <button onClick={() => scrollToSection('how-it-works')} className="hover:text-indigo-600 transition-colors">ML Architecture</button>
-            <button onClick={() => scrollToSection('about')} className="hover:text-indigo-600 transition-colors">About</button>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -92,7 +90,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-2xl">
-              Seamlessly monitor Diabetes, Cardiovascular, and Epidemiological health risks with pre-trained machine learning pipelines, live IoT smartwatch biometrics, PDF report auto-extraction, and Groq AI care guidance in Tamil, English, and Hindi.
+              Seamlessly monitor Diabetes, Cardiovascular, and Epidemiological health risks with pre-trained machine learning pipelines, live IoT smartwatch biometrics, PDF report auto-extraction, and AI care guidance in Tamil, English, and Hindi.
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -139,7 +137,7 @@ export default function LandingPage() {
             </div>
 
             <div className="p-3.5 rounded-2xl bg-indigo-50 border border-indigo-100 text-xs text-indigo-900 font-medium">
-              ✨ Groq AI recommendation generated for patient profile in Tamil & English.
+              ✨ Personalized AI recommendation generated for patient profile in Tamil & English.
             </div>
           </div>
 

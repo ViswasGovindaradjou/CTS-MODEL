@@ -67,7 +67,7 @@ export default function Signup() {
               <span className="text-indigo-600">Clinical Health Profile</span>
             </h2>
             <p className="text-xs text-slate-500 font-medium leading-relaxed">
-              Join the chronic disease risk monitoring platform. Evaluate disease probabilities in real time and receive Groq AI recommendations in Tamil, English, or Hindi.
+              Join the chronic disease risk monitoring platform. Evaluate disease probabilities in real time and receive AI recommendations in Tamil, English, or Hindi.
             </p>
           </div>
 
@@ -78,7 +78,7 @@ export default function Signup() {
             </div>
             <div className="flex items-center gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Personalized Groq AI Clinical Recommendations</span>
+              <span>Personalized AI Clinical Recommendations</span>
             </div>
             <div className="flex items-center gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />

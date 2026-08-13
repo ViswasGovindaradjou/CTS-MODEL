@@ -55,7 +55,7 @@ export default function QuickActionModal({ isOpen, onClose, onToggleChat }) {
     },
     {
       title: 'Ask AI Health Assistant',
-      desc: 'Interactive Groq chatbot (Tamil, English, Hindi)',
+      desc: 'Interactive AI chatbot (Tamil, English, Hindi)',
       icon: MessageSquareHeart,
       color: 'bg-amber-50 text-amber-600 border-amber-100',
       action: () => { onToggleChat(); onClose(); }
