@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { 
   X, 
@@ -8,8 +9,7 @@ import {
   FileUp, 
   Watch, 
   MessageSquareHeart, 
-  Sparkles,
-  ArrowRight
+  Sparkles
 } from 'lucide-react';
 
 export default function QuickActionModal({ isOpen, onClose, onToggleChat }) {
@@ -62,9 +62,13 @@ export default function QuickActionModal({ isOpen, onClose, onToggleChat }) {
     }
   ];
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 relative overflow-hidden space-y-5">
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fadeIn">
+      <div 
+        className="fixed inset-0" 
+        onClick={onClose} 
+      />
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 relative z-10 space-y-5 transform transition-all scale-100">
         
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
@@ -80,7 +84,7 @@ export default function QuickActionModal({ isOpen, onClose, onToggleChat }) {
 
           <button 
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+            className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -94,7 +98,7 @@ export default function QuickActionModal({ isOpen, onClose, onToggleChat }) {
               <button
                 key={index}
                 onClick={act.action}
-                className="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-100 hover:border-indigo-200 hover:bg-slate-50/80 transition-all text-left group cursor-pointer"
+                className="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/40 transition-all text-left group cursor-pointer"
               >
                 <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${act.color}`}>
                   <Icon className="w-5 h-5" />
@@ -115,4 +119,6 @@ export default function QuickActionModal({ isOpen, onClose, onToggleChat }) {
       </div>
     </div>
   );
+
+  return ReactDOM.createPortal(modalContent, document.body);
 }
