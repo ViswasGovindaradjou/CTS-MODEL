@@ -202,3 +202,4 @@ class MLModelManager:
         return prob, category, key_factors
 
 ml_manager = MLModelManager()
+ml_service = ml_manager

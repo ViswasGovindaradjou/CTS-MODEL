@@ -2,7 +2,6 @@ import time
 from fastapi import APIRouter, Depends
 from app.services.wearable_service import wearable_simulator
 from app.services.ml_service import ml_service
-from app.services.db_service import db_service
 from app.routers.auth import get_current_user
 from app.database.models import User
 
@@ -51,15 +50,6 @@ def evaluate_live_telemetry(current_user: User = Depends(get_current_user)):
     }
     diab_prob, diab_cat, diab_factors = ml_service.predict_diabetes(diabetes_input)
 
-    # Save real-time prediction to DB
-    db_service.save_prediction(
-        user_id=current_user.id,
-        disease_type="diabetes",
-        risk_score=diab_prob,
-        risk_category=diab_cat,
-        input_data=diabetes_input
-    )
-
     # 2. Prepare Cardiovascular ML Input Features
     heart_input = {
         "age": int(user_age),
@@ -77,15 +67,6 @@ def evaluate_live_telemetry(current_user: User = Depends(get_current_user)):
         "thal": "normal"
     }
     heart_prob, heart_cat, heart_factors = ml_service.predict_cardiovascular(heart_input)
-
-    # Save real-time prediction to DB
-    db_service.save_prediction(
-        user_id=current_user.id,
-        disease_type="cardiovascular",
-        risk_score=heart_prob,
-        risk_category=heart_cat,
-        input_data=heart_input
-    )
 
     return {
         "timestamp": time.time(),
